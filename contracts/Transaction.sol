@@ -11,30 +11,29 @@ contract Transaction {
     constructor(){
             owner = msg.sender;
     }
-    Mapping(address => uint256 ) public balances;
+    mapping(address => uint256 ) public balances;
 
     function transfer(address receiver, uint256 amount) public {
-        require(amonut>0, "amount must be greater than  zero");
-        require(balances[msg.sender] > amount, "Insufficient balance");
+        require(amount> 0, "amount must be greater than  zero");
+        require(balances[msg.sender] >= amount, "Insufficient balance");
         balances[msg.sender] -= amount;
-        balances[receiver.sender] += amount;
+        balances[receiver] += amount;
     }
 
-    function deposit(uint256 amount ) public {
-        if(amount < 0){
+    function deposit(uint256 amount ) public   {
+        if(amount < 1){
             revert("deposit failed, amount must be greater than zero");
         }
         balances[msg.sender] += amount;
 
     }
-    function withdraw(uint256 amount )public {
-        assert(amount <= balances[msg.sender ]);
+    function withdrawFund(uint256 amount )public   {
         require(balances[msg.sender] >= amount, "Insufficient balance");
+        assert(amount <= balances[msg.sender ]);
+
         balances[msg.sender] -= amount;
 
-        payable(msg.sender).transfer(amonut);
+
     }
-    receive externally payable{
-        deposit(msg.value)
-    }
+  
 }
